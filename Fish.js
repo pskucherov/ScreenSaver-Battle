@@ -134,7 +134,10 @@ Fish.prototype.stepInLifeOfEachFish = function() {
         ++this.type.cnfFish;
         this.lastReprod = 0;
         return 1;
+    } else if (this.lifeStep >= this.type.maxStepsInLife) {
+        return -1;
     }
+
     return 0;
 };
 
@@ -231,3 +234,9 @@ Fish.prototype.stepOfPredator = function( preys ) {
     return this.stepInLifeOfEachFish();
 };
 
+Fish.prototype.killFish = function() {
+    if (this.type.cnfFish > 0) {
+        --this.type.cnfFish;
+    }
+    this.divElemCache.remove();
+};

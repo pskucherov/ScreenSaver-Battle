@@ -15,29 +15,13 @@ window.onload = function () {
     fishType.push(new FishTypes('green',  150, 50, 1500, -1, 0.9,  50));
     fishType.push(new FishTypes('yellow', 300, 15, 1500, -1, 0.99, 50));
 
-
     bttl.addPredator(new Fish(bttl.getNewFishId(), fishType[0], xOffset, (screenHeight - yOffset) ));
     bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[1], (screenWidth - xOffset), (screenHeight - yOffset) ));
     bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[2], (screenWidth - xOffset), yOffset));
     bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[3], xOffset, yOffset));
 
-    /*
-    for (var i = 0; i <= 10500; i++) {
-
-    }
-    */
-
     setInterval( function() {
         bttl.stepOfLife();
-    }, 1 );
-
-    /*
-    fishes.predators.push(new Fish(fishes.length, fishType[0], xOffset, (screenHeight - yOffset) ));
-    fishes.preys.push(new Fish(fishes.length, fishType[1], (screenWidth - xOffset), (screenHeight - yOffset) ));
-    fishes.preys.push(new Fish(fishes.length, fishType[2], (screenWidth - xOffset), yOffset));
-    fishes.preys.push(new Fish(fishes.length, fishType[3], xOffset, yOffset));
-    */
-
-
+    }, 10);
 
 };
