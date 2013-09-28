@@ -36,3 +36,19 @@ Battle.prototype.addPredator = function(predator) {
 Battle.prototype.getNewFishId = function() {
     return (this.preys.length + this.predators.length);
 };
+
+
+Battle.prototype.stepOfLife = function() {
+    var i;
+    for (i = 0; i < this.predators.length; i++) {
+        this.predators[i].stepOfPredator(this.preys);
+    }
+
+    for (i = 0; i < this.predators.length; i++) {
+        this.preys[i].stepOfPrey(this.predators);
+    }
+};
+
+
+
+
