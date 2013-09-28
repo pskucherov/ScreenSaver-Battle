@@ -104,6 +104,39 @@ Fish.prototype.stepInLifeOfEachFish = function() {
  */
 Fish.prototype.stepOfPrey = function( predators ) {
 
+    var d = 0;
+
+    this.deltaX = this.deltaY = 0;
+
+    if ( this.x - this.consts.XMIN < this.type.rangeOfVisibility ) {
+        this.deltaX = this.deltaX  + 1 / ((this.x - this.consts.XMIN + this.consts.EPS) * this.consts.FEAROFEDGE);
+    }
+
+    if ( this.consts.XMAX - this.x < this.type.rangeOfVisibility ) {
+        this.deltaX = this.deltaX  + 1 / ((this.x - this.consts.XMAX - this.consts.EPS) * this.consts.FEAROFEDGE);
+    }
+
+    if ( this.y - this.consts.YMIN < this.type.rangeOfVisibility ) {
+        this.deltaY = this.deltaY  + 1 / ((this.y - this.consts.YMIN + this.consts.EPS) * this.consts.FEAROFEDGE);
+    }
+
+    if ( this.consts.YMAX - this.y < this.type.rangeOfVisibility ) {
+        this.deltaY = this.deltaY  + 1 / ((this.y - this.consts.YMAX - this.consts.EPS) * this.consts.FEAROFEDGE);
+    }
+
+    d = Math.sqrt(this.deltaX * this.deltaX + this.deltaY * this.deltaY);
+
+    if ( d < this.consts.EPS ) {
+        this.deltaX = 2 * this.status * this.consts.rand() * this.type.speed - this.status * this.type.speed;
+        this.deltaY = 2 * this.status * this.consts.rand() * this.type.speed - this.status * this.type.speed;
+    } else {
+        this.deltaX = this.status * this.type.speed * this.deltaX /d;
+        this.deltaY = this.status * this.type.speed * this.deltaY /d;
+    }
+
+    //console.log(this.deltaX, this.deltaY);
+
+    this._moveTo(this.deltaX, this.deltaY);
     this.stepInLifeOfEachFish();
 };
 
@@ -134,8 +167,6 @@ Fish.prototype.stepOfPredator = function( preys ) {
         console.log(found);
     } else {
 
-        console.log(this.x, this.y);
-
         if ( this.x <= this.consts.XMIN || this.x >= this.consts.XMAX ||
              this.y <= this.consts.YMIN || this.y >= this.consts.YMAX ) {
 
@@ -159,9 +190,9 @@ Fish.prototype.stepOfPredator = function( preys ) {
         this.deltaY = this.status * this.type.speed * this.deltaY /d;
     }
 
+    this._moveTo(this.deltaX, this.deltaY);
     this.oldDeltaX = this.deltaX;
     this.oldDeltaY = this.deltaY;
-    this._moveTo(this.deltaX, this.deltaY);
 
     this.stepInLifeOfEachFish();
 };

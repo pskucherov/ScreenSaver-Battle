@@ -19,12 +19,14 @@ function Constants() {
 
     this.rand = function() {
         var a = Math.random();
-        while(a < 0.1) {
+/*
+        while(a <= 0.1) {
             a *= 10;
         }
         if ( a < 0.5 ) {
             a -= 1;
         }
+*/
         return a;
     };
 }

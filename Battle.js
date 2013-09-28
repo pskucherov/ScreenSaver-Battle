@@ -44,7 +44,7 @@ Battle.prototype.stepOfLife = function() {
         this.predators[i].stepOfPredator(this.preys);
     }
 
-    for (i = 0; i < this.predators.length; i++) {
+    for (i = 0; i < this.preys.length; i++) {
         this.preys[i].stepOfPrey(this.predators);
     }
 };
