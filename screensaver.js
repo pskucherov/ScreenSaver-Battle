@@ -2,7 +2,7 @@
 window.onload = function () {
 
     var fishType = []
-        , fishes = []
+        , bttl = new Battle()
         , consts = new Constants()
         , screenWidth  = consts.SCREENWIDTH
         , screenHeight = consts.SCREENHEIGHT
@@ -16,10 +16,20 @@ window.onload = function () {
     fishType.push(new FishTypes('yellow', 300, 15, 1500, -1, 0.99, 50));
 
 
-    fishes.push(new Fish(fishes.length, fishType[0], xOffset, (screenHeight - yOffset) ));
-    fishes.push(new Fish(fishes.length, fishType[1], (screenWidth - xOffset), (screenHeight - yOffset) ));
-    fishes.push(new Fish(fishes.length, fishType[2], (screenWidth - xOffset), yOffset));
-    fishes.push(new Fish(fishes.length, fishType[3], xOffset, yOffset));
+    bttl.addPredator(new Fish(bttl.getNewFishId(), fishType[0], xOffset, (screenHeight - yOffset) ));
+    bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[1], (screenWidth - xOffset), (screenHeight - yOffset) ));
+    bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[2], (screenWidth - xOffset), yOffset));
+    bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[3], xOffset, yOffset));
+
+
+
+    /*
+    fishes.predators.push(new Fish(fishes.length, fishType[0], xOffset, (screenHeight - yOffset) ));
+    fishes.preys.push(new Fish(fishes.length, fishType[1], (screenWidth - xOffset), (screenHeight - yOffset) ));
+    fishes.preys.push(new Fish(fishes.length, fishType[2], (screenWidth - xOffset), yOffset));
+    fishes.preys.push(new Fish(fishes.length, fishType[3], xOffset, yOffset));
+    */
+
 
 
 };
