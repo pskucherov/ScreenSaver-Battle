@@ -71,6 +71,18 @@ Fish.prototype.getY = function() {
 };
 
 /**
+ * Проверка существования дом-узла.
+ * Используется для удаления рыбы из массива, после того, как она была съедена
+ * @returns {boolean}
+ */
+Fish.prototype.domElemExists = function() {
+    if (this.divElemCache === -1) {
+        return false;
+    }
+    return true;
+};
+
+/**
  * Проверяет позицию, чтобы не выходила за границы экрана
  * @private
  */
@@ -133,6 +145,9 @@ Fish.prototype.stepInLifeOfEachFish = function() {
     } else if (this.lastReprod >= this.type.stepsBtwnReproduct && this.hunger >= this.type.needFood) {
         ++this.type.cnfFish;
         this.lastReprod = 0;
+        if (this.hunger > 0) {
+            --this.hunger;
+        }
         return 1;
     } else if (this.lifeStep >= this.type.maxStepsInLife) {
         return -1;
@@ -155,18 +170,20 @@ Fish.prototype.stepOfPrey = function( predators ) {
     this.status = 1;
 
     for (i = 0; i < predators.length; i++) {
-        d = Math.sqrt(
-            (this.x - predators[i].x) * (this.x - predators[i].x)
-                +
-                (this.y - predators[i].y) * (this.y - predators[i].y)
-        );
-        if (d < this.type.rangeOfVisibility) {
-            if (d < this.consts.EPS) d = this.consts.EPS;
-            this.status = 2;
-            deltaXBuf = (this.x - predators[i].x)/(d*d);
-            deltaYBuf = (this.y - predators[i].y)/(d*d);
-            this.deltaX += deltaXBuf;
-            this.deltaY += deltaYBuf;
+        if (typeof predators[i] !== 'undefined') {
+            d = Math.sqrt(
+                (this.x - predators[i].x) * (this.x - predators[i].x)
+                    +
+                    (this.y - predators[i].y) * (this.y - predators[i].y)
+            );
+            if (d < this.type.rangeOfVisibility) {
+                if (d < this.consts.EPS) d = this.consts.EPS;
+                this.status = 2;
+                deltaXBuf = (this.x - predators[i].x)/(d*d);
+                deltaYBuf = (this.y - predators[i].y)/(d*d);
+                this.deltaX += deltaXBuf;
+                this.deltaY += deltaYBuf;
+            }
         }
     }
 
@@ -212,15 +229,17 @@ Fish.prototype.stepOfPredator = function( preys ) {
     ;
 
     for (i = 0; i < preys.length; i++) {
-        if (preys[i].lifeStep > 100) {
-            d = Math.sqrt(
-                    (this.x - preys[i].x) * (this.x - preys[i].x)
-                +
-                    (this.y - preys[i].y) * (this.y - preys[i].y)
-            );
-            if (d < dmin) {
-                dmin = d;
-                found = i;
+        if (typeof preys[i] !== 'undefined') {
+            if (preys[i].lifeStep > 100) {
+                d = Math.sqrt(
+                        (this.x - preys[i].x) * (this.x - preys[i].x)
+                    +
+                        (this.y - preys[i].y) * (this.y - preys[i].y)
+                );
+                if (d < dmin) {
+                    dmin = d;
+                    found = i;
+                }
             }
         }
     }
@@ -229,6 +248,14 @@ Fish.prototype.stepOfPredator = function( preys ) {
         this.status = 2;
         this.deltaX = preys[found].x - this.x;
         this.deltaY = preys[found].y - this.y;
+
+        //le.log(dmin, (this.status * this.type.speed + this.consts.FISHRADIUS));
+
+        if (dmin < this.status * this.type.speed + this.consts.FISHRADIUS) {
+            preys[found].killFish();
+            ++this.hunger;
+        }
+
     } else {
         this.status = 1;
         if ( this.x <= this.consts.XMIN || this.x >= this.consts.XMAX ||
@@ -262,4 +289,5 @@ Fish.prototype.killFish = function() {
         --this.type.cnfFish;
     }
     this.divElemCache.remove();
+    this.divElemCache = -1;
 };

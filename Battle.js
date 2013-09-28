@@ -66,21 +66,25 @@ Battle.prototype.stepOfLife = function() {
 
     for (i = 0; i < this.preys.length; i++) {
         if (typeof this.preys[i] !== 'undefined') {
-            buf = this.preys[i].stepOfPrey(this.predators);
-            switch(buf) {
-                case 1:
-                    this.addPrey(
-                        new Fish(this.getNewFishId(),
-                            this.preys[i].getType(),
-                            this.preys[i].getX(),
-                            this.preys[i].getY()
-                        )
-                    );
-                    break;
-                case -1:
-                    this.preys[i].killFish();
-                    delete this.preys[i];
-                    break;
+            if (this.preys[i].domElemExists()) {
+                buf = this.preys[i].stepOfPrey(this.predators);
+                switch(buf) {
+                    case 1:
+                        this.addPrey(
+                            new Fish(this.getNewFishId(),
+                                this.preys[i].getType(),
+                                this.preys[i].getX(),
+                                this.preys[i].getY()
+                            )
+                        );
+                        break;
+                    case -1:
+                        this.preys[i].killFish();
+                        delete this.preys[i];
+                        break;
+                }
+            } else {
+                delete this.preys[i];
             }
         }
     }

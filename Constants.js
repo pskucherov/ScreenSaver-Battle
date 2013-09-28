@@ -16,6 +16,7 @@ function Constants() {
     this.YMIN         = 5;                 //          координат,
     this.XMAX         = this.SCREENWIDTH - 20;   //                  которые могут
     this.YMAX         = this.SCREENHEIGHT - 20;  //                          принимать рыбы
+    this.FISHRADIUS   = 4;
 
     this.rand = function() {
         var a = Math.random();
