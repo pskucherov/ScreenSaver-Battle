@@ -37,15 +37,40 @@ Battle.prototype.getNewFishId = function() {
     return (this.preys.length + this.predators.length);
 };
 
-
+/**
+ * Вызвать шаг жизни для каждой рыбы
+ */
 Battle.prototype.stepOfLife = function() {
-    var i;
+    var i
+        , buf;
     for (i = 0; i < this.predators.length; i++) {
-        this.predators[i].stepOfPredator(this.preys);
+        buf = this.predators[i].stepOfPredator(this.preys);
+        switch(buf) {
+            case 1:
+                this.addPredator(
+                    new Fish(this.getNewFishId(),
+                        this.predators[i].getType(),
+                        this.predators[i].getX(),
+                        this.predators[i].getY()
+                    )
+                );
+                break;
+        }
     }
 
     for (i = 0; i < this.preys.length; i++) {
-        this.preys[i].stepOfPrey(this.predators);
+        buf = this.preys[i].stepOfPrey(this.predators);
+        switch(buf) {
+            case 1:
+                this.addPrey(
+                    new Fish(this.getNewFishId(),
+                        this.preys[i].getType(),
+                        this.preys[i].getX(),
+                        this.preys[i].getY()
+                    )
+                );
+                break;
+        }
     }
 };
 

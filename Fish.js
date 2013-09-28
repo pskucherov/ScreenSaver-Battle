@@ -46,6 +46,30 @@ function Fish(id, type, posX, posY) {
 
 }
 
+
+/**
+ * Getter for type
+ * @returns {Object}
+ */
+Fish.prototype.getType = function() {
+    return this.type;
+};
+/**
+ * Getter for x
+ * @returns {number}
+ */
+Fish.prototype.getX = function() {
+    return this.x;
+};
+
+/**
+ * Getter for y
+ * @returns {number}
+ */
+Fish.prototype.getY = function() {
+    return this.y;
+};
+
 /**
  * Проверяет позицию, чтобы не выходила за границы экрана
  * @private
@@ -93,10 +117,25 @@ Fish.prototype._moveTo = function(deltaX, deltaY) {
 
 /**
  * "Ежедневные" действия каждой рыбы
+ * @returns {number} - Что делать с рыбой. (1 - создать новую, 0 - ничего, -1 - умертвить)
  */
 Fish.prototype.stepInLifeOfEachFish = function() {
+
     ++this.lifeStep;
     ++this.lastReprod;
+
+    this._moveTo(this.deltaX, this.deltaY);
+    this.oldDeltaX = this.deltaX;
+    this.oldDeltaY = this.deltaY;
+
+    if (this.type.cnfFish >= this.type.maxNum) {
+        this.lastReprod = 0;
+    } else if (this.lastReprod >= this.type.stepsBtwnReproduct && this.hunger >= this.type.needFood) {
+        ++this.type.cnfFish;
+        this.lastReprod = 0;
+        return 1;
+    }
+    return 0;
 };
 
 /**
@@ -136,8 +175,7 @@ Fish.prototype.stepOfPrey = function( predators ) {
 
     //console.log(this.deltaX, this.deltaY);
 
-    this._moveTo(this.deltaX, this.deltaY);
-    this.stepInLifeOfEachFish();
+    return this.stepInLifeOfEachFish();
 };
 
 /**
@@ -190,10 +228,6 @@ Fish.prototype.stepOfPredator = function( preys ) {
         this.deltaY = this.status * this.type.speed * this.deltaY /d;
     }
 
-    this._moveTo(this.deltaX, this.deltaY);
-    this.oldDeltaX = this.deltaX;
-    this.oldDeltaY = this.deltaY;
-
-    this.stepInLifeOfEachFish();
+    return this.stepInLifeOfEachFish();
 };
 

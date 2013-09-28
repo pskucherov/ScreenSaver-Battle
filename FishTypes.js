@@ -41,6 +41,7 @@ function FishTypes(color, stepsBtwnReproduct, maxNum, maxStepsInLife, needFood, 
     this.stepsBtwnReproduct = stepsBtwnReproduct;
 
     this.maxNum         = maxNum;
+    this.cnfFish        = 0;
     this.maxStepsInLife = maxStepsInLife;
     this.needFood       = needFood;
     this.speed          = speed;
