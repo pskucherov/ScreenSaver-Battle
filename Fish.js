@@ -146,9 +146,29 @@ Fish.prototype.stepInLifeOfEachFish = function() {
  */
 Fish.prototype.stepOfPrey = function( predators ) {
 
-    var d = 0;
+    var d = 0
+        , i
+        , deltaXBuf
+        , deltaYBuf;
 
     this.deltaX = this.deltaY = 0;
+    this.status = 1;
+
+    for (i = 0; i < predators.length; i++) {
+        d = Math.sqrt(
+            (this.x - predators[i].x) * (this.x - predators[i].x)
+                +
+                (this.y - predators[i].y) * (this.y - predators[i].y)
+        );
+        if (d < this.type.rangeOfVisibility) {
+            if (d < this.consts.EPS) d = this.consts.EPS;
+            this.status = 2;
+            deltaXBuf = (this.x - predators[i].x)/(d*d);
+            deltaYBuf = (this.y - predators[i].y)/(d*d);
+            this.deltaX += deltaXBuf;
+            this.deltaY += deltaYBuf;
+        }
+    }
 
     if ( this.x - this.consts.XMIN < this.type.rangeOfVisibility ) {
         this.deltaX = this.deltaX  + 1 / ((this.x - this.consts.XMIN + this.consts.EPS) * this.consts.FEAROFEDGE);
@@ -199,15 +219,18 @@ Fish.prototype.stepOfPredator = function( preys ) {
                     (this.y - preys[i].y) * (this.y - preys[i].y)
             );
             if (d < dmin) {
+                dmin = d;
                 found = i;
             }
         }
     }
 
-    if (found !== -1 && 1 == 2) {
-        console.log(found);
+    if (found !== -1 && dmin < this.type.rangeOfVisibility) {
+        this.status = 2;
+        this.deltaX = preys[found].x - this.x;
+        this.deltaY = preys[found].y - this.y;
     } else {
-
+        this.status = 1;
         if ( this.x <= this.consts.XMIN || this.x >= this.consts.XMAX ||
              this.y <= this.consts.YMIN || this.y >= this.consts.YMAX ) {
 
