@@ -3,8 +3,9 @@ window.onload = function () {
 
     var fishType = []
         , fishes = []
-        , screenWidth  = $(window).width()
-        , screenHeight = $(window).height()
+        , consts = new Constants()
+        , screenWidth  = consts.SCREENWIDTH
+        , screenHeight = consts.SCREENHEIGHT
         , xOffset = parseInt(screenWidth / 5, 10)
         , yOffset = parseInt(screenHeight / 5, 10)
     ;
