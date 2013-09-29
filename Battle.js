@@ -3,6 +3,7 @@
  * @constructor
  */
 function Battle() {
+    this.fishs     = [];
     this.preys     = [];
     this.predators = [];
 }
@@ -16,6 +17,7 @@ Battle.prototype.addPrey = function(prey) {
         throw new Error ("This isn't prey!");
     }
     this.preys[prey.id] = prey;
+    this.fishs[prey.id] = { fish: this.preys[prey.id], type: 1 }; // type: 1 - жертва
 };
 
 /**
@@ -27,6 +29,7 @@ Battle.prototype.addPredator = function(predator) {
         throw new Error ("This isn't predator!");
     }
     this.predators[predator.id] = predator;
+    this.fishs[predator.id] = { fish: this.predators[predator.id], type: 0 }; // type: 0 - хищник
 };
 
 /**
@@ -64,67 +67,54 @@ Battle.prototype.getFishId = function() {
  */
 Battle.prototype.stepOfLife = function() {
     var i
-        , fish = { obj: null, type: null, buf: null } // type: 0 - хищик, 1 - жертва
-        , len
+        , answ
+        , buf
         , newFish;
 
-    if ( this.predators.length > this.preys.length ) {
-        len = this.predators.length;
-    } else {
-        len = this.preys.length;
-    }
-
-    for (i = 0; i < len; i++) {
-
-        fish = { obj: null, type: null, buf: null };
-
-        if (typeof this.predators[i] !== 'undefined') {
-            fish.i  = i;
-            fish.obj  = this.predators[i];
-            fish.type = 0;
-            fish.buf  = this.predators[i].step(this.preys);
-        } else if (typeof this.preys[i] !== 'undefined') {
-            fish.i    = i;
-            fish.obj  = this.preys[i];
-            fish.type = 1;
-            fish.buf  = this.preys[i].step(this.predators);
-        }
-
-        if (fish.buf !== null) {
-            if (fish.obj.domElemExists()) {
-                switch(fish.buf) {
-                    case 1:
-
-                        if (fish.type === 1) {
-                            newFish = new Prey(/*this.getNewFishId(),*/
-                                this.getFishId(),
-                                this.preys[i].getType(),
-                                this.preys[i].getXNewFish(),
-                                this.preys[i].getYNewFish()
-                            );
-                            this.addPrey(newFish);
-                        } else if (fish.type === 0) {
-                            newFish = new Predator(/*this.getNewFishId(),*/
-                                this.getFishId(),
-                                this.preys[i].getType(),
-                                this.preys[i].getXNewFish(),
-                                this.preys[i].getYNewFish()
-                            );
-                            this.addPredator(newFish);
-                        }
-                        break;
-                    case -1:
-                        fish.obj.killFish();
-                        console.log(i, this.preys[i], this.predators[i]);
-                        delete fish.obj;
-                        console.log(i, this.preys[i], this.predators[i]);
-
-                        break;
+    for (i = 0; i < this.fishs.length; i++) {
+        if (typeof this.fishs[i] !== 'undefined') {
+            buf = null;
+            if (this.fishs[i].type === 1) {
+                buf = this.predators;
+            } else if (this.fishs[i].type === 0) {
+                buf = this.preys;
+            }
+            if (buf !== null) {
+                if (this.fishs[i].fish.domElemExists()) {
+                    answ = this.fishs[i].fish.step(buf);
+                    switch(answ) {
+                        case 1:
+                            if (this.fishs[i].type === 1) {
+                                newFish = new Prey(
+                                    this.getFishId(),
+                                    this.fishs[i].fish.getType(),
+                                    this.fishs[i].fish.getXNewFish(),
+                                    this.fishs[i].fish.getYNewFish()
+                                );
+                                this.addPrey(newFish);
+                            } else if (this.fishs[i].type === 0) {
+                                newFish = new Predator(
+                                    this.getFishId(),
+                                    this.fishs[i].fish.getType(),
+                                    this.fishs[i].fish.getXNewFish(),
+                                    this.fishs[i].fish.getYNewFish()
+                                );
+                                this.addPredator(newFish);
+                            }
+                            break;
+                        case -1:
+                            this.fishs[i].fish.killFish();
+                            delete this.fishs[i].fish;
+                            delete this.fishs[i];
+                            break;
+                    }
+                } else {
+                    delete this.fishs[i].fish;
+                    delete this.fishs[i];
                 }
-            } else {
-                delete fish.obj;
             }
         }
+
     }
 
 };
