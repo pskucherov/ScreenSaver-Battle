@@ -158,7 +158,7 @@ Fish.prototype._createFish = function() {
 };
 
 /**
- *
+ * Сместить рыбу на deltaX, deltaY
  * @param deltaX
  * @param deltaY
  * @private
@@ -172,9 +172,9 @@ Fish.prototype._moveTo = function(deltaX, deltaY) {
 };
 
 /**
- *
- * @param deltaX
- * @param deltaY
+ * Поставить рыбу в указанную точку х, y
+ * @param x
+ * @param y
  * @private
  */
 Fish.prototype._moveToXY = function(x, y) {

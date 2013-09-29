@@ -73,7 +73,7 @@ Battle.prototype.stepOfLife = function() {
                 case 1:
                     this.addPredator(
                         new Fish(/*this.getNewFishId()*/
-                            this.getFishId('predator'),
+                            this.getFishId(),
                             this.predators[i].getType(),
                             this.predators[i].getXNewFish(),
                             this.predators[i].getYNewFish()
@@ -96,7 +96,7 @@ Battle.prototype.stepOfLife = function() {
                     case 1:
                         this.addPrey(
                             new Fish(/*this.getNewFishId(),*/
-                                this.getFishId('prey'),
+                                this.getFishId(),
                                 this.preys[i].getType(),
                                 this.preys[i].getXNewFish(),
                                 this.preys[i].getYNewFish()

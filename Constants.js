@@ -19,7 +19,7 @@ function Constants() {
     this.FISHRADIUS   = 4;
 
     this.rand = function() {
-        var a = Math.random();
+        return Math.random();
 /*
         while(a <= 0.1) {
             a *= 10;
@@ -27,8 +27,9 @@ function Constants() {
         if ( a < 0.5 ) {
             a -= 1;
         }
-*/
+
         return a;
+ */
     };
 }
 
