@@ -10,6 +10,9 @@ window.onload = function () {
         , yOffset = parseInt(screenHeight / 5, 10)
     ;
 
+
+    //extend(Prey, Fish);
+
     //отвязать всех рыб откурсора
     $(window).on('click', function(e) {
         $(window).unbind('mousemove');
@@ -22,10 +25,10 @@ window.onload = function () {
     fishType.push(new FishTypes('yellow', 300, 15, 1500, -1, 1.97, 50));
 
     //расстановка рыб на экране
-    bttl.addPredator(new Fish(bttl.getNewFishId(), fishType[0], xOffset, (screenHeight - yOffset) ));
-    bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[1], (screenWidth - xOffset), (screenHeight - yOffset) ));
-    bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[2], (screenWidth - xOffset), yOffset));
-    bttl.addPrey(new Fish(bttl.getNewFishId(), fishType[3], xOffset, yOffset));
+    bttl.addPredator(new Predator(bttl.getNewFishId(), fishType[0], xOffset, (screenHeight - yOffset) ));
+    bttl.addPrey(new Prey(bttl.getNewFishId(), fishType[1], (screenWidth - xOffset), (screenHeight - yOffset) ));
+    bttl.addPrey(new Prey(bttl.getNewFishId(), fishType[2], (screenWidth - xOffset), yOffset));
+    bttl.addPrey(new Prey(bttl.getNewFishId(), fishType[3], xOffset, yOffset));
 
     //Битва
     setInterval( function() {
@@ -33,3 +36,12 @@ window.onload = function () {
     }, 1);
 
 };
+
+function extend(Child, Parent) {
+    var F = function() { }
+    F.prototype = Parent.prototype
+    Child.prototype = new F()
+    Child.prototype.constructor = Child
+    Child.superclass = Parent.prototype
+}
+

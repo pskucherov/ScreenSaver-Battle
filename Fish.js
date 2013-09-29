@@ -221,6 +221,7 @@ Fish.prototype.stepInLifeOfEachFish = function() {
 /**
  * Действия рыбы-жертвы
  */
+/*
 Fish.prototype.stepOfPrey = function( predators ) {
 
     var d = 0
@@ -280,10 +281,11 @@ Fish.prototype.stepOfPrey = function( predators ) {
 
     return this.stepInLifeOfEachFish();
 };
-
+*/
 /**
  * Действия рыбы-хищника
  */
+/*
 Fish.prototype.stepOfPredator = function( preys ) {
     var dmin = 11000
         , found = -1
@@ -354,6 +356,7 @@ Fish.prototype.stepOfPredator = function( preys ) {
 
     return this.stepInLifeOfEachFish();
 };
+*/
 
 Fish.prototype.killFish = function() {
     if (this.divElemCache !== null && this.divElemCache !== -1) {
