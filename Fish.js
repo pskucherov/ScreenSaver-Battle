@@ -46,8 +46,28 @@ function Fish(id, type, posX, posY) {
 
     this._createFish();
 
+    this.fishBindToCursor = false;
+    this.events();
 }
 
+/**
+ * При наведении курсора на рыбу - рыба движется за курсором, когда курсор движется.
+ * Когда курсор останавливается - рыба уплывает.
+ * Клик мыши отвязывает всех рыб от курсора (см. в screensaver)
+ */
+Fish.prototype.events = function() {
+    var _this = this;
+
+    this.divElemCache.mouseenter(function(e) {
+        if (!_this.fishBindToCursor) {
+            _this.fishBindToCursor = true;
+            $(window).mousemove(function(e){
+                _this._moveToXY(e.pageX, e.pageY);
+            });
+        }
+    });
+
+};
 
 /**
  * Getter for type
@@ -149,6 +169,21 @@ Fish.prototype._moveTo = function(deltaX, deltaY) {
     this._checkPosition();
 
     this.divElemCache.css({ 'left' : this.x, 'top': this.y });
+};
+
+/**
+ *
+ * @param deltaX
+ * @param deltaY
+ * @private
+ */
+Fish.prototype._moveToXY = function(x, y) {
+    this.x = x;
+    this.y = y;
+    this._checkPosition();
+    if (this.divElemCache !== null && this.divElemCache !== -1) {
+        this.divElemCache.css({ 'left' : this.x, 'top': this.y });
+    }
 };
 
 /**
