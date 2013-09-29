@@ -15,7 +15,7 @@ Battle.prototype.addPrey = function(prey) {
     if(!(prey instanceof Fish) || prey.type.needFood !== -1 ) {
         throw new Error ("This isn't prey!");
     }
-    this.preys.push(prey);
+    this.preys[prey.id] = prey;
 };
 
 /**
@@ -26,7 +26,7 @@ Battle.prototype.addPredator = function(predator) {
     if(!(predator instanceof Fish) || predator.type.needFood !== 1 ) {
         throw new Error ("This isn't predator!");
     }
-    this.predators.push(predator);
+    this.predators[predator.id] = predator;
 };
 
 /**
@@ -35,6 +35,28 @@ Battle.prototype.addPredator = function(predator) {
  */
 Battle.prototype.getNewFishId = function() {
     return (this.preys.length + this.predators.length);
+};
+
+/**
+ * Получить ID для хищника или жертвы
+ * @returns {number}
+ */
+Battle.prototype.getFishId = function() {
+    var i
+        , len = 0;
+
+    if (this.preys.length > this.predators.length) {
+        len = this.preys.length;
+    } else {
+        len = this.predators.length;
+    }
+
+    for (i = 0; i < len; i++) {
+        if ( typeof this.preys[i] === 'undefined' && typeof this.predators[i] === 'undefined' ) {
+            return i;
+        }
+    }
+    return this.getNewFishId();
 };
 
 /**
@@ -50,10 +72,11 @@ Battle.prototype.stepOfLife = function() {
             switch(buf) {
                 case 1:
                     this.addPredator(
-                        new Fish(this.getNewFishId(),
+                        new Fish(/*this.getNewFishId()*/
+                            this.getFishId('predator'),
                             this.predators[i].getType(),
-                            this.predators[i].getX(),
-                            this.predators[i].getY()
+                            this.predators[i].getXNewFish(),
+                            this.predators[i].getYNewFish()
                         )
                     );
                     break;
@@ -72,10 +95,11 @@ Battle.prototype.stepOfLife = function() {
                 switch(buf) {
                     case 1:
                         this.addPrey(
-                            new Fish(this.getNewFishId(),
+                            new Fish(/*this.getNewFishId(),*/
+                                this.getFishId('prey'),
                                 this.preys[i].getType(),
-                                this.preys[i].getX(),
-                                this.preys[i].getY()
+                                this.preys[i].getXNewFish(),
+                                this.preys[i].getYNewFish()
                             )
                         );
                         break;

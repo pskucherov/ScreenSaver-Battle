@@ -71,6 +71,28 @@ Fish.prototype.getY = function() {
 };
 
 /**
+ * Getter x for new fish
+ * @returns {number}
+ */
+Fish.prototype.getXNewFish = function() {
+    if (Math.random() > 0.5) {
+        return this.x + this.deltaX;
+    }
+    return this.x - this.deltaX;
+};
+
+/**
+ * Getter y for new fish
+ * @returns {number}
+ */
+Fish.prototype.getYNewFish = function() {
+    if (Math.random() > 0.5) {
+        return this.y + this.deltaY;
+    }
+    return this.y - this.deltaY;
+};
+
+/**
  * Проверка существования дом-узла.
  * Используется для удаления рыбы из массива, после того, как она была съедена
  * @returns {boolean}
@@ -89,13 +111,13 @@ Fish.prototype.domElemExists = function() {
 Fish.prototype._checkPosition = function() {
     if (this.x < 1) {
         this.x = 1;
-    } else if (this.x >= this.consts.SCREENWIDTH ) {
-        this.x = this.consts.SCREENWIDTH - 1;
+    } else if (this.x >= this.consts.SCREENWIDTH-4 ) {
+        this.x = this.consts.SCREENWIDTH - 4;
     }
     if (this.y < 1) {
         this.y = 1;
-    } else if (this.y >= this.consts.SCREENHEIGHT ) {
-        this.y = this.consts.SCREENHEIGHT - 1;
+    } else if (this.y >= this.consts.SCREENHEIGHT-4 ) {
+        this.y = this.consts.SCREENHEIGHT - 4;
     }
 };
 
@@ -229,6 +251,7 @@ Fish.prototype.stepOfPredator = function( preys ) {
         , found = -1
         , i
         , d = 0
+        , rnd
     ;
 
     for (i = 0; i < preys.length; i++) {
@@ -261,13 +284,19 @@ Fish.prototype.stepOfPredator = function( preys ) {
 
     } else {
         this.status = 1;
-        if ( this.x <= this.consts.XMIN || this.x >= this.consts.XMAX ||
-             this.y <= this.consts.YMIN || this.y >= this.consts.YMAX ) {
+        if ( (this.x + this.deltaX) <= this.consts.XMIN || (this.x + this.deltaX) >= this.consts.XMAX ||
+            (this.y + this.deltaY) <= this.consts.YMIN || (this.y + this.deltaY) >= this.consts.YMAX ) {
 
-            while (
-                (this.x + this.deltaX) <= this.consts.XMIN || (this.x + this.deltaX) >= this.consts.XMAX ||
-                (this.y + this.deltaY) <= this.consts.YMIN || (this.y + this.deltaY) >= this.consts.YMAX
-            ) {
+            rnd = Math.random();
+            if ( rnd > 0.8 ) {
+                this.deltaX = -this.deltaX;
+            } else if ( rnd > 0.6 ) {
+                this.deltaY = -this.deltaY;
+            } else if ( rnd > 0.5 ) {
+                this.deltaX = this.deltaX + rnd;
+            } else if ( rnd > 0.4 ) {
+                this.deltaY = this.deltaY + rnd;
+            } else {
                 this.deltaX = 2 * this.status * this.consts.rand() * this.type.speed - this.status * this.type.speed;
                 this.deltaY = 2 * this.status * this.consts.rand() * this.type.speed - this.status * this.type.speed;
             }
