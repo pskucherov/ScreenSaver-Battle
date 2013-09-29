@@ -43,6 +43,7 @@ Battle.prototype.getNewFishId = function() {
 Battle.prototype.stepOfLife = function() {
     var i
         , buf;
+
     for (i = 0; i < this.predators.length; i++) {
         if (typeof this.predators[i] !== 'undefined') {
             buf = this.predators[i].stepOfPredator(this.preys);

@@ -140,17 +140,20 @@ Fish.prototype.stepInLifeOfEachFish = function() {
     this.oldDeltaX = this.deltaX;
     this.oldDeltaY = this.deltaY;
 
+    if (this.lifeStep >= this.type.maxStepsInLife) {
+        return -1;
+    }
+
     if (this.type.cnfFish >= this.type.maxNum) {
         this.lastReprod = 0;
-    } else if (this.lastReprod >= this.type.stepsBtwnReproduct && this.hunger >= this.type.needFood) {
+    }
+    if (this.lastReprod >= this.type.stepsBtwnReproduct && this.hunger >= this.type.needFood) {
         ++this.type.cnfFish;
         this.lastReprod = 0;
         if (this.hunger > 0) {
-            --this.hunger;
+            this.hunger = 0;
         }
         return 1;
-    } else if (this.lifeStep >= this.type.maxStepsInLife) {
-        return -1;
     }
 
     return 0;
@@ -285,9 +288,11 @@ Fish.prototype.stepOfPredator = function( preys ) {
 };
 
 Fish.prototype.killFish = function() {
-    if (this.type.cnfFish > 0) {
-        --this.type.cnfFish;
+    if (this.divElemCache !== null && this.divElemCache !== -1) {
+        if (this.type.cnfFish > 0) {
+            --this.type.cnfFish;
+        }
+        this.divElemCache.remove();
+        this.divElemCache = -1;
     }
-    this.divElemCache.remove();
-    this.divElemCache = -1;
 };

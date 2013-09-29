@@ -14,8 +14,8 @@ function Constants() {
     this.FEAROFEDGE   = 3;                  // во сколько раз жертвы сильнее боятся края
     this.XMIN         = 5;                 // значение
     this.YMIN         = 5;                 //          координат,
-    this.XMAX         = this.SCREENWIDTH - 20;   //                  которые могут
-    this.YMAX         = this.SCREENHEIGHT - 20;  //                          принимать рыбы
+    this.XMAX         = this.SCREENWIDTH - 30;   //                  которые могут
+    this.YMAX         = this.SCREENHEIGHT - 30;  //                          принимать рыбы
     this.FISHRADIUS   = 4;
 
     this.rand = function() {

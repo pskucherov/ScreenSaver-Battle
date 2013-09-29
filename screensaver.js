@@ -22,6 +22,6 @@ window.onload = function () {
 
     setInterval( function() {
         bttl.stepOfLife();
-    }, 10);
+    }, 1);
 
 };
