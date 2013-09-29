@@ -40,6 +40,8 @@ function Fish(id, type, posX, posY) {
 
     this.divElemCache = null;
 
+    this.havePursuer = false;
+
     this._checkPosition();
 
     this._createFish();
@@ -193,6 +195,7 @@ Fish.prototype.stepOfPrey = function( predators ) {
 
     this.deltaX = this.deltaY = 0;
     this.status = 1;
+    this.havePursuer = false;
 
     for (i = 0; i < predators.length; i++) {
         if (typeof predators[i] !== 'undefined') {
@@ -256,7 +259,7 @@ Fish.prototype.stepOfPredator = function( preys ) {
 
     for (i = 0; i < preys.length; i++) {
         if (typeof preys[i] !== 'undefined') {
-            if (preys[i].lifeStep > 100) {
+            if (preys[i].lifeStep > 100 && !preys[i].havePursuer) {
                 d = Math.sqrt(
                         (this.x - preys[i].x) * (this.x - preys[i].x)
                     +
@@ -275,6 +278,7 @@ Fish.prototype.stepOfPredator = function( preys ) {
         this.deltaX = preys[found].x - this.x;
         this.deltaY = preys[found].y - this.y;
 
+        preys[found].havePursuer = true;
         //le.log(dmin, (this.status * this.type.speed + this.consts.FISHRADIUS));
 
         if (dmin < this.status * this.type.speed + this.consts.FISHRADIUS) {
