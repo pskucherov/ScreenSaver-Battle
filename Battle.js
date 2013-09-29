@@ -3,6 +3,7 @@
  * @constructor
  */
 function Battle() {
+    this.fishs     = [];
     this.preys     = [];
     this.predators = [];
 }
@@ -16,6 +17,7 @@ Battle.prototype.addPrey = function(prey) {
         throw new Error ("This isn't prey!");
     }
     this.preys[prey.id] = prey;
+    this.fishs[prey.id] = { fish: this.preys[prey.id], type: 1 }; // type: 1 - жертва
 };
 
 /**
@@ -27,6 +29,7 @@ Battle.prototype.addPredator = function(predator) {
         throw new Error ("This isn't predator!");
     }
     this.predators[predator.id] = predator;
+    this.fishs[predator.id] = { fish: this.predators[predator.id], type: 0 }; // type: 0 - хищник
 };
 
 /**
@@ -64,54 +67,54 @@ Battle.prototype.getFishId = function() {
  */
 Battle.prototype.stepOfLife = function() {
     var i
-        , buf;
+        , answ
+        , buf
+        , newFish;
 
-    for (i = 0; i < this.predators.length; i++) {
-        if (typeof this.predators[i] !== 'undefined') {
-            buf = this.predators[i].stepOfPredator(this.preys);
-            switch(buf) {
-                case 1:
-                    this.addPredator(
-                        new Fish(/*this.getNewFishId()*/
-                            this.getFishId(),
-                            this.predators[i].getType(),
-                            this.predators[i].getXNewFish(),
-                            this.predators[i].getYNewFish()
-                        )
-                    );
-                    break;
-                case -1:
-                    this.predators[i].killFish();
-                    delete this.predators[i];
-                    break;
+    for (i = 0; i < this.fishs.length; i++) {
+        if (typeof this.fishs[i] !== 'undefined') {
+            buf = null;
+            if (this.fishs[i].type === 1) {
+                buf = this.predators;
+            } else if (this.fishs[i].type === 0) {
+                buf = this.preys;
             }
-        }
-    }
-
-    for (i = 0; i < this.preys.length; i++) {
-        if (typeof this.preys[i] !== 'undefined') {
-            if (this.preys[i].domElemExists()) {
-                buf = this.preys[i].stepOfPrey(this.predators);
-                switch(buf) {
-                    case 1:
-                        this.addPrey(
-                            new Fish(/*this.getNewFishId(),*/
-                                this.getFishId(),
-                                this.preys[i].getType(),
-                                this.preys[i].getXNewFish(),
-                                this.preys[i].getYNewFish()
-                            )
-                        );
-                        break;
-                    case -1:
-                        this.preys[i].killFish();
-                        delete this.preys[i];
-                        break;
+            if (buf !== null) {
+                if (this.fishs[i].fish.domElemExists()) {
+                    answ = this.fishs[i].fish.step(buf);
+                    switch(answ) {
+                        case 1:
+                            if (this.fishs[i].type === 1) {
+                                newFish = new Prey(
+                                    this.getFishId(),
+                                    this.fishs[i].fish.getType(),
+                                    this.fishs[i].fish.getXNewFish(),
+                                    this.fishs[i].fish.getYNewFish()
+                                );
+                                this.addPrey(newFish);
+                            } else if (this.fishs[i].type === 0) {
+                                newFish = new Predator(
+                                    this.getFishId(),
+                                    this.fishs[i].fish.getType(),
+                                    this.fishs[i].fish.getXNewFish(),
+                                    this.fishs[i].fish.getYNewFish()
+                                );
+                                this.addPredator(newFish);
+                            }
+                            break;
+                        case -1:
+                            this.fishs[i].fish.killFish();
+                            delete this.fishs[i].fish;
+                            delete this.fishs[i];
+                            break;
+                    }
+                } else {
+                    delete this.fishs[i].fish;
+                    delete this.fishs[i];
                 }
-            } else {
-                delete this.preys[i];
             }
         }
+
     }
 
 };
