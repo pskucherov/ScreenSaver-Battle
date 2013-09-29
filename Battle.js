@@ -64,6 +64,7 @@ Battle.prototype.getFishId = function() {
 
 /**
  * Вызвать шаг жизни для каждой рыбы
+ * После каждого шага рыба может ничего не делать, либо родить ещё одну рыбу, либо умереть.
  */
 Battle.prototype.stepOfLife = function() {
     var i

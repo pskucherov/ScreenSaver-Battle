@@ -10,9 +10,6 @@ window.onload = function () {
         , yOffset = parseInt(screenHeight / 5, 10)
     ;
 
-
-    //extend(Prey, Fish);
-
     //отвязать всех рыб откурсора
     $(window).on('click', function(e) {
         $(window).unbind('mousemove');
