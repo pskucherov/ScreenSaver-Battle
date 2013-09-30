@@ -28,6 +28,8 @@ function Fish(id, type, posX, posY) {
     this.x    = posX;
     this.y    = posY;
 
+    this.direct = 0; //рыба направлена 0 - влево, 1 - вправо
+
     this.deltaX = 0;
     this.deltaY = 0;
     this.oldDeltaX = this.consts.rand();
@@ -151,10 +153,38 @@ Fish.prototype._createFish = function() {
     this.divElemCache = $('<div>', {
            id: 'fish-' + this.id,
         class: 'fish',
-        style: 'border-color: ' + this.type.color + '; top: ' + this.y + 'px; left: ' + this.x + 'px;'
+        //style: 'border-color: ' + this.type.color + '; top: ' + this.y + 'px; left: ' + this.x + 'px;'
+        style: 'top: ' + this.y + 'px; left: ' + this.x + 'px; background: url(' + this.type.image + ') no-repeat;'
     });
 
     $('body').append(this.divElemCache);
+};
+
+
+Fish.prototype.setDirect = function(oldX, newX) {
+    var image = null;
+
+    oldX = parseInt(oldX, 10);
+    newX = parseInt(newX, 10);
+
+    if (oldX > newX + 1) { //рыба плывёт влево
+        if(this.direct) {
+            image = this.divElemCache.css('background-image');
+            image = image.replace(/right-(.*)-fish.png/, "left-$1-fish.png");
+            this.direct = 0;
+        }
+    } else if (oldX - 1 < newX) {    //рыба плывёт
+        if(!this.direct) {
+            image = this.divElemCache.css('background-image');
+            image = image.replace(/left-(.*)-fish.png/, "right-$1-fish.png");
+            this.direct = 1;
+        }
+    }
+
+    if (image !== null) {
+        this.divElemCache.css('background-image', image);
+    }
+
 };
 
 /**
@@ -164,6 +194,9 @@ Fish.prototype._createFish = function() {
  * @private
  */
 Fish.prototype._moveTo = function(deltaX, deltaY) {
+
+    this.setDirect(this.x, (this.x + deltaX));
+
     this.x += deltaX;
     this.y += deltaY;
     this._checkPosition();
@@ -178,6 +211,9 @@ Fish.prototype._moveTo = function(deltaX, deltaY) {
  * @private
  */
 Fish.prototype._moveToXY = function(x, y) {
+
+    this.setDirect(this.x, x);
+
     this.x = x;
     this.y = y;
     this._checkPosition();

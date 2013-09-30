@@ -37,6 +37,7 @@ function FishTypes(color, stepsBtwnReproduct, maxNum, maxStepsInLife, needFood, 
 
 
     this.color = color;
+    this.image = './images/left-' + color + '-fish.png';
 
     this.stepsBtwnReproduct = stepsBtwnReproduct;
 
