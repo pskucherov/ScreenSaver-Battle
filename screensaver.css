@@ -1,20 +1,36 @@
+html {
+    height: 100%;
+}
+
 body {
     padding: 0;
     margin: 0;
+    min-height: 100%;
 
-    background-color: black;
+    background-image: -o-linear-gradient(to bottom, #87a3ca, #194369);
+    background-image: -moz-linear-gradient(to bottom, #87a3ca, #194369);
+    background-image: -webkit-linear-gradient(top, #87a3ca, #194369);
+    background-image: -ms-linear-gradient(to bottom, #87a3ca, #194369);
+    background-image: linear-gradient(to bottom, #87a3ca, #194369);
+
+    background-repeat: no-repeat;
+    background-color: #194369;
 }
 
 .fish {
-     width: 8px;
-    height: 8px;
+     width: 30px;
+    height: 30px;
 
     position: absolute;
 
+    /*
        -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
             border-radius: 4px;
+    */
 
     background-color: transparent;
-              border: 1px solid;
+    /*          border: 1px solid;
+    */
+
 }
