@@ -28,11 +28,34 @@ window.onload = function () {
     bttl.addPrey(new Prey(bttl.getNewFishId(), fishType[3], xOffset, yOffset));
 
     //Битва
+    function animate() {
+        requestAnimationFrame(animate);
+        bttl.stepOfLife();
+    }
+    animate();
+
+    /*
     setInterval( function() {
         bttl.stepOfLife();
     }, 1);
+    */
 
 };
+
+
+
+//http://habrahabr.ru/post/114358/
+if ( !window.requestAnimationFrame ) {
+    window.requestAnimationFrame = ( function() {
+        return window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+                window.setTimeout( callback, 1000 / 60 );
+            };
+    })();
+}
 
 function extend(Child, Parent) {
     var F = function() { }
